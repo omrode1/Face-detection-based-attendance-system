@@ -10,61 +10,108 @@
             margin: 0;
             padding: 20px;
             background-color: #f0f0f0;
+            text-align: center;
         }
         h1 {
-            text-align: center;
             color: #333;
         }
-        form {
-            max-width: 400px;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        input[type="text"], input[type="number"], select {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
+        #video-container {
             display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            margin-bottom: 20px;
         }
-        input[type="submit"] {
-            width: 100%;
+        #video-feed {
+            width: 320px;
+            height: 240px;
+            border: 2px solid #333;
+        }
+        .button {
             background-color: #4CAF50;
             color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            border-radius: 4px;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 10px;
             cursor: pointer;
+            border: none;
+            border-radius: 5px;
         }
-        input[type="submit"]:hover {
+        .button:hover {
             background-color: #45a049;
         }
     </style>
 </head>
 <body>
     <h1>Candidate Registration</h1>
-    <form action="/register" method="post">
+    <div id="video-container">
+        <video id="video-feed" autoplay></video>
+    </div>
+    <button id="capture-button" class="button">Capture Images</button>
+    <form id="registration-form" action="/register" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="captured-images" name="captured_images">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name" required><br><br>
         <label for="branch">Branch:</label>
-        <input type="text" id="branch" name="branch" required>
+        <input type="text" id="branch" name="branch" required><br><br>
         <label for="uid">UID:</label>
-        <input type="text" id="uid" name="uid" required>
+        <input type="text" id="uid" name="uid" required><br><br>
         <label for="sex">Sex:</label>
         <select id="sex" name="sex" required>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-        </select>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select><br><br>
         <label for="year_of_study">Year of Study:</label>
-        <input type="number" id="year_of_study" name="year_of_study" required>
-        <input type="submit" value="Register">
+        <input type="text" id="year_of_study" name="year_of_study" required><br><br>
+        <button type="submit" class="button">Submit</button>
     </form>
+    <script>
+        // Get the video element
+        const video = document.getElementById('video-feed');
+        // Get the capture button
+        const captureButton = document.getElementById('capture-button');
+        // Get the registration form
+        const registrationForm = document.getElementById('registration-form');
+        // Array to store captured images
+        let capturedImages = [];
+
+        // Check if getUserMedia is available
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Get user's camera with source 1
+            navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: '1' } } })
+                .then(function(stream) {
+                    // Set video element's source to user's camera
+                    video.srcObject = stream;
+                })
+                .catch(function(error) {
+                    console.error('Error accessing camera:', error);
+                });
+        } else {
+            console.error('getUserMedia is not supported');
+        }
+
+        // Function to capture image from video feed
+        function captureImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/jpeg');
+            capturedImages.push(imageData);
+        }
+
+        // Event listener for capture button
+        captureButton.addEventListener('click', function() {
+            // Capture 100 images
+            for (let i = 0; i < 100; i++) {
+                captureImage();
+            }
+            // Set captured images data in the hidden input field
+            document.getElementById('captured-images').value = JSON.stringify(capturedImages);
+            // Submit the registration form
+            registrationForm.submit();
+        });
+    </script>
 </body>
 </html>
