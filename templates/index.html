@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance System</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+        input[type="text"], input[type="email"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+        .clear-button {
+            background-color: #f44336;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+        }
+        .clear-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Attendance System</h1>
+
+        <!-- Registration Form -->
+        <div class="form-container">
+            <h2>Register Candidate</h2>
+            <form action="/register" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="branch">Branch:</label>
+                <input type="text" id="branch" name="branch" required>
+                <label for="uid">UID:</label>
+                <input type="text" id="uid" name="uid" required>
+                <label for="sex">Sex:</label>
+                <select id="sex" name="sex" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                <label for="year_of_study">Year of Study:</label>
+                <input type="number" id="year_of_study" name="year_of_study" required>
+                <input type="submit" value="Register">
+            </form>
+        </div>
+
+        <!-- Individual Candidate Attendance -->
+        <div class="form-container">
+            <h2>Candidate Attendance</h2>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>In/Out Time</th>
+                </tr>
+                <!-- Attendance data will be dynamically populated here -->
+            </table>
+        </div>
+
+        <!-- Clear CSV Files Button -->
+        <a href="/clear_data" class="clear-button">Clear CSV Files</a>
+    </div>
+</body>
+</html>
